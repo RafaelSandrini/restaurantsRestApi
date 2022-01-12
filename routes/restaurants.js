@@ -139,11 +139,11 @@ router.put("/:restaurantId", async(req,res) => {
         {new:true}
         );
 
-        if(!updatedRestaurant) return res.status(404).send("Book not found");
+        if(!updatedRestaurant) return res.status(404).send("Restaurant not found");
         res.send(updatedRestaurant);
 });
 
-// delete a book based on ID
+// delete a restaurant based on ID
 router.delete("/:restaurantId", async (req,res) => {
     const restaurant = await Restaurants.findByIdAndRemove(req.params.restaurantId);
     if(!restaurant) return res.status(404).send("Restaurant with Id not found");
