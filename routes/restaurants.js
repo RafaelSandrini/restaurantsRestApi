@@ -61,7 +61,11 @@ router.get("/:restaurantId", async (req,res) => {
         const skip = (page -1) * size;
 
         const restaurants = await Restaurants.findById(req.params.restaurantId).limit(limit).skip(skip)
-        res.send(restaurants);
+        res.send({
+            page,
+            size,
+            data: restaurants,
+        });
     } catch (error) {
             res.status(500).send("Something went wrong");
         }
@@ -85,7 +89,11 @@ router.get("/cuisine/:id", async (req,res) => {
         const id = req.params === undefined ? req.id : req.params.id
 
         const restaurants = await Restaurants.find({cuisine : id}).limit(limit).skip(skip)
-        res.send(restaurants);
+        res.send({
+            page,
+            size,
+            data: restaurants,
+        });
     } catch (error) {
             res.status(500).send("Something went wrong");
         }
@@ -108,7 +116,11 @@ router.get("/name/:id", async (req,res) => {
         const id = req.params === undefined ? req.id : req.params.id
 
         const restaurants = await Restaurants.find({name : id}).limit(limit).skip(skip)
-        res.send(restaurants);
+        res.send({
+            page,
+            size,
+            data: restaurants,
+        });
     } catch (error) {
             res.status(500).send("Something went wrong");
         }
