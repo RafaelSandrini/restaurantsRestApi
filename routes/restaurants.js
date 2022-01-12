@@ -69,28 +69,50 @@ router.get("/:restaurantId", async (req,res) => {
 
 
 // get restaurant by CUISINE
-// router.get("/:id", async (req,res) => {
-//     try {
-//         let {page,size} = req.query
-//         if (!page) {
-//             page = 1
-//         }
-//         if (!size) {
-//             size = 10
-//         }
+router.get("/cuisine/:id", async (req,res) => {
+    try {
+        let {page,size} = req.query
+        if (!page) {
+            page = 1
+        }
+        if (!size) {
+            size = 10
+        }
 
-//         const limit = parseInt(size)
-//         const skip = (page -1) * size;
+        const limit = parseInt(size)
+        const skip = (page -1) * size;
 
-//         const id = req.params.id
-//         // req.params === undefined ? req.id : 
+        const id = req.params === undefined ? req.id : req.params.id
 
-//         const restaurants = await Restaurants.find({cuisine : id}).limit(limit).skip(skip)
-//         res.send(restaurants);
-//     } catch (error) {
-//             res.status(500).send("Something went wrong");
-//         }
-// });
+        const restaurants = await Restaurants.find({cuisine : id}).limit(limit).skip(skip)
+        res.send(restaurants);
+    } catch (error) {
+            res.status(500).send("Something went wrong");
+        }
+});
+
+// get restaurant by NAME
+router.get("/name/:id", async (req,res) => {
+    try {
+        let {page,size} = req.query
+        if (!page) {
+            page = 1
+        }
+        if (!size) {
+            size = 10
+        }
+
+        const limit = parseInt(size)
+        const skip = (page -1) * size;
+
+        const id = req.params === undefined ? req.id : req.params.id
+
+        const restaurants = await Restaurants.find({name : id}).limit(limit).skip(skip)
+        res.send(restaurants);
+    } catch (error) {
+            res.status(500).send("Something went wrong");
+        }
+});
 
 
 // update restaurant based on ID
