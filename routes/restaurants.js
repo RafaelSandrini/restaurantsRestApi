@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const {Restaurants, validateRestaurant} = require('../models/restaurants');
-// const restaurants = require('../models/restaurants');
 
 //POST: create a new restaurant
 router.post('/', async (req, res) => {
@@ -23,28 +22,76 @@ router.post('/', async (req, res) => {
 });
 
 // get all restaurants
-router.get("/",(req,res) => {
-    Restaurants.find()
-        .then((restaurant) => res.send(restaurant))
-        .catch((error) => {
+router.get("/", async (req,res) => {
+    try {
+        let {page,size} = req.query
+        if (!page) {
+            page = 1
+        }
+        if (!size) {
+            size = 10
+        }
+
+        const limit = parseInt(size)
+        const skip = (page -1) * size;
+
+        const restaurants = await Restaurants.find({},{},{limit: limit, skip: skip})
+        res.send({
+            page,
+            size,
+            data: restaurants,
+        });
+    } catch (error) {
             res.status(500).send("Something went wrong");
-    });
+        }
 });
 
 // get restaurant by ID
 router.get("/:restaurantId", async (req,res) => {
-    const restaurant = await Restaurants.findById(req.params.restaurantId);
-    if (!restaurant) return res.status(404).send("Restaurant not found");
-    res.send(restaurant);
-    //     .then((restaurant) => {
-    //         if(restaurant) return res.send(restaurant);
-    //         // added the return to avoid the error=> code: 'ERR_HTTP_HEADERS_SENT' after try to get some restaurant
-    //         res.status(404).send("Restaurant not found");
-    //     })
-    //     .catch((error) => {
-    //         res.status(500).send(error.message);
-    //     });
+    try {
+        let {page,size} = req.query
+        if (!page) {
+            page = 1
+        }
+        if (!size) {
+            size = 10
+        }
+
+        const limit = parseInt(size)
+        const skip = (page -1) * size;
+
+        const restaurants = await Restaurants.findById(req.params.restaurantId).limit(limit).skip(skip)
+        res.send(restaurants);
+    } catch (error) {
+            res.status(500).send("Something went wrong");
+        }
 });
+
+
+// get restaurant by CUISINE
+// router.get("/:id", async (req,res) => {
+//     try {
+//         let {page,size} = req.query
+//         if (!page) {
+//             page = 1
+//         }
+//         if (!size) {
+//             size = 10
+//         }
+
+//         const limit = parseInt(size)
+//         const skip = (page -1) * size;
+
+//         const id = req.params.id
+//         // req.params === undefined ? req.id : 
+
+//         const restaurants = await Restaurants.find({cuisine : id}).limit(limit).skip(skip)
+//         res.send(restaurants);
+//     } catch (error) {
+//             res.status(500).send("Something went wrong");
+//         }
+// });
+
 
 // update restaurant based on ID
 router.put("/:restaurantId", async(req,res) => {

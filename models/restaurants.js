@@ -5,7 +5,7 @@ const yup = require("yup");
 // restaurant schemas
 const RestSchema = new mongoose.Schema({
     address: {
-        type: String,
+        type: Object,
         required: true
     },
     name: {
